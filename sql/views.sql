@@ -1,7 +1,3 @@
--- =========================================
--- GamePulse Indexes
--- =========================================
-
 CREATE INDEX idx_games_developer_id ON games(developer_id);
 CREATE INDEX idx_games_genre_id ON games(genre_id);
 CREATE INDEX idx_games_platform_id ON games(platform_id);

@@ -3,6 +3,7 @@
 -- PostgreSQL
 -- =========================================
 
+-- Drop tables (safe re-run)
 DROP TABLE IF EXISTS play_sessions CASCADE;
 DROP TABLE IF EXISTS reviews CASCADE;
 DROP TABLE IF EXISTS purchases CASCADE;
@@ -42,7 +43,7 @@ CREATE TABLE players (
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     country VARCHAR(50),
-    join_date DATE NOT NULL DEFAULT CURRENT_DATE
+    join_date DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE games (
@@ -72,19 +73,19 @@ CREATE TABLE games (
         ON DELETE RESTRICT
         ON UPDATE CASCADE,
 
-    CONSTRAINT uq_game_title_platform_release
+    CONSTRAINT uq_game_unique
         UNIQUE (title, platform_id, release_date)
 );
 
 -- =========================================
--- Transaction / Activity Tables
+-- Transactions
 -- =========================================
 
 CREATE TABLE purchases (
     purchase_id SERIAL PRIMARY KEY,
     player_id INT NOT NULL,
     game_id INT NOT NULL,
-    purchase_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     amount_paid DECIMAL(10,2) NOT NULL CHECK (amount_paid >= 0),
 
     CONSTRAINT fk_purchases_player
@@ -106,7 +107,7 @@ CREATE TABLE reviews (
     game_id INT NOT NULL,
     rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
     review_text TEXT,
-    review_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_reviews_player
         FOREIGN KEY (player_id)
@@ -128,7 +129,7 @@ CREATE TABLE play_sessions (
     session_id SERIAL PRIMARY KEY,
     player_id INT NOT NULL,
     game_id INT NOT NULL,
-    session_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    session_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     hours_played DECIMAL(6,2) NOT NULL CHECK (hours_played > 0),
 
     CONSTRAINT fk_sessions_player
