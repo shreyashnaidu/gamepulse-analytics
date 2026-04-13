@@ -1,0 +1,2 @@
+-- Additional business-rule constraints can go here later.
+-- Main constraints are currently defined inside schema.sql.
